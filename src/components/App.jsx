@@ -65,7 +65,29 @@ class App extends Component {
       contact.name.toLowerCase().includes(normalizedFilter)
     );
   };
+  componentDidMount() {
+    //визивається один раз при маунті компоненту, щоб взяти дані
+    // console.log('app component didmount');
 
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+    // console.log(parsedContacts);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    //визивається після кожного оновлення
+    // console.log('did update componentDidUpdate');
+
+    if (this.state.contacts !== prevState.contacts) {
+      // console.log('updates contacts');
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+    // console.log(prevState); //попередній
+    // console.log(this.state); //фактичний, оновлений
+    // this.setState() не варто визивати, зациклить рендер, сетстейт, дідапдейт
+  }
   render() {
     const filteredContacts = this.getVisibleContacts();
 
