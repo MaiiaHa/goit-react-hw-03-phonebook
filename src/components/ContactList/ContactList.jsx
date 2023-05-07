@@ -13,6 +13,7 @@ const ContactList = ({ contacts, deleteContact }) => {
             className={css.btn}
             type="button"
             onClick={() => deleteContact(id)}
+            aria-label="Delete contact"
           >
             <DeleteIcon fill="white" />
             {/* Delete */}

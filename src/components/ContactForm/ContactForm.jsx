@@ -72,7 +72,7 @@ class ContactForm extends Component {
           />
         </label>
 
-        <button className={css.inputBtn} type="submit">
+        <button className={css.inputBtn} type="submit" aria-label="Add contact">
           <FaUserPlus />
           Add contact
         </button>
