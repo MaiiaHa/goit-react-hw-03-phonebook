@@ -27,5 +27,3 @@ Filter.propTypes = {
 };
 
 export default Filter;
-
-// onChange={onChange}

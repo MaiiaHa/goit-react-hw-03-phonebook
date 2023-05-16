@@ -16,9 +16,31 @@ class App extends Component {
     filter: '',
   };
 
-  addContact = ({ name, number }) => {
-    // return this.state.contacts;
+  componentDidMount() {
+    //визивається один раз при маунті компоненту, щоб взяти дані
+    // console.log('app component didmount');
 
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+    // console.log(parsedContacts);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    //визивається після кожного оновлення
+
+    if (this.state.contacts !== prevState.contacts) {
+      // console.log('updates contacts');
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+    // console.log(prevState); //попередній
+    // console.log(this.state); //фактичний, оновлений
+    // this.setState() не варто визивати, зациклить рендер, сетстейт, дідапдейт
+  }
+
+  addContact = ({ name, number }) => {
     const newUserData = {
       id: nanoid(10),
       name,
@@ -36,13 +58,16 @@ class App extends Component {
       contacts: [newUserData, ...prevState.contacts],
     }));
   };
-  //   addContact = data => {
+
+  // ===============
+  // addContact = data => {
   //   console.log(data); // {name: 'knhih', number: '34-34-34'} введені дані
   //   //з затримкою в асинхронному коді теж працює:
   //   // setTimeout(() => {
   //   //   console.log(data);
   //   // }, 1000);
   // };
+  // ===============
 
   hendleChangeFilter = event => {
     event.preventDefault(event);
@@ -65,29 +90,7 @@ class App extends Component {
       contact.name.toLowerCase().includes(normalizedFilter)
     );
   };
-  componentDidMount() {
-    //визивається один раз при маунті компоненту, щоб взяти дані
-    // console.log('app component didmount');
 
-    const contacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(contacts);
-    if (parsedContacts) {
-      this.setState({ contacts: parsedContacts });
-    }
-    // console.log(parsedContacts);
-  }
-  componentDidUpdate(prevProps, prevState) {
-    //визивається після кожного оновлення
-    // console.log('did update componentDidUpdate');
-
-    if (this.state.contacts !== prevState.contacts) {
-      // console.log('updates contacts');
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-    // console.log(prevState); //попередній
-    // console.log(this.state); //фактичний, оновлений
-    // this.setState() не варто визивати, зациклить рендер, сетстейт, дідапдейт
-  }
   render() {
     const filteredContacts = this.getVisibleContacts();
 
